@@ -809,11 +809,326 @@ const shallowCompare = (source, target) => {
       return false;
     }
 
-    console.log("obj ");
+    // console.log("obj ");
     return Object.keys(source).every((key) => source[key] === target[key]);
   }
 
   return source === target;
 };
 
-console.log(shallowCompare({ a: 1 }, { a: 1 }));
+// console.log(shallowCompare({ a: 1 }, { a: 1 }));
+
+//////////////////////////////////////////////////////////////
+//
+//1. Implement Shallow Comparison
+//
+//////////////////////////////////////////////////////////////
+
+const deepCompare = (source, target) => {
+  //   console.log(typeOf(source));
+  if (typeOf(source) !== typeOf(source)) {
+    return false;
+  }
+
+  if (typeOf(source) === "[object Array]") {
+    if (source.length !== target.length) {
+      return false;
+    }
+
+    return source.every((item, index) => deepCompare(item, target[index]));
+  }
+
+  if (typeOf(source) === "[object Object]") {
+    if (Object.keys(source).length !== Object.keys(target).length) {
+      return false;
+    }
+
+    // console.log("obj ");
+    return Object.keys(source).every((key) => deepCompare(source[key], target[key]));
+  }
+
+  return source === target;
+};
+
+// console.log(deepCompare({ a: { a: 1 } }, { a: { a: 1 } }));
+
+//////////////////////////////////////////////////////////////
+//
+//3. Create Memoization Function
+//
+//////////////////////////////////////////////////////////////
+
+const memoizeAdd = () => {
+  let cache = {};
+  console.log("cache", cache);
+
+  return (value) => {
+    if (value in cache) {
+      console.log("fetching from cache");
+      return cache[value];
+    } else {
+      console.log("calculating results");
+      const result = value + 10;
+      cache[value] = result;
+      return result;
+    }
+  };
+};
+
+// const newAdd = memoizeAdd();
+// console.log(newAdd(9));
+// console.log(newAdd(9));
+// console.log(newAdd(19));
+
+//////////////////////////////////////////////////////////////
+//
+//1. Fibonacci
+//
+//////////////////////////////////////////////////////////////
+
+// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144
+
+const fibo = (n) => {
+  if (n < 2) {
+    console.log("-> 1");
+
+    return 1;
+  } else {
+    console.log("call", n - 2, n - 1);
+    return fibo(n - 2) + fibo(n - 1);
+  }
+};
+
+// console.log("result: ", fibo(6));
+
+// 5 + 6 11
+// 3 + 4  7
+// 1 + 2  3
+// 1 + 0  1
+
+//////////////////////////////////////////////////////////////
+//
+//2. Palindrome
+//
+//////////////////////////////////////////////////////////////
+
+const palindrome = (str) => {
+  //   const sub1 = str.substring(0, str.length / 2);
+  const sub2 = str
+    // .substring(str.length % 2 ? str.length / 2 + 1 : str.length / 2, str.length)
+    .split("")
+    .reverse()
+    .join("");
+
+  //   console.log(sub1);
+  //   console.log(sub2);
+  return str === sub2;
+};
+
+// console.log(palindrome("anna"));
+// console.log(palindrome("madam"));
+// console.log(palindrome("foo"));
+
+//////////////////////////////////////////////////////////////
+//
+//3. Anagram
+//
+//////////////////////////////////////////////////////////////
+
+const anagram = (str1, str2) => {
+  const orderStr = (str) =>
+    str
+      .toLowerCase()
+      .split("")
+      .sort((a, b) => (a > b ? 1 : -1))
+      .join("");
+
+  return orderStr(str1) === orderStr(str2);
+};
+
+// console.log(anagram("listen", "silent"));
+// console.log(anagram("listen", "silent"));
+// console.log(anagram("rail safety", "fairy tales"));
+// console.log(anagram("the eyes", "they see"));
+// console.log(anagram("the eyes", "they sesdsde"));
+
+//////////////////////////////////////////////////////////////
+//
+//4. Finding vowels
+//
+//////////////////////////////////////////////////////////////
+
+const vowels = ["a", "e", "i", "o", "u"];
+
+const findV = (str, vowels) => {
+  const strArr = str.toLowerCase().split("");
+  console.log(strArr);
+
+  const res = strArr.reduce((acc, item) => {
+    return vowels.includes(item) ? (acc += 1) : acc;
+  }, 0);
+
+  return res;
+};
+
+// console.log(findV("ta excepturi optio accusamus ab dicta eum deleniti atque vitae deserunt", vowels));
+
+//////////////////////////////////////////////////////////////
+//
+//1. Convert to Title Case
+//
+//////////////////////////////////////////////////////////////
+
+// Write a function to convert a string to title case
+
+const titleCase = (str) => {
+  const strArr = str
+    .toLowerCase()
+    // .split("")
+    // .map((item, index, arr) => (arr[index - 1] === " " || index === 0 ? item.toUpperCase() : item))
+    // .join("");
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  console.log(strArr);
+
+  return strArr;
+};
+
+// Provided test cases
+// titleCase("I'm a little tea pot"); // should return a string.
+// titleCase("I'm a little tea pot"); // should return “I’m A Little Tea Pot”.
+// titleCase("sHoRt AnD sToUt"); //should return “Short And Stout”.
+// titleCase("HERE IS MY HANDLE HERE IS MY SPOUT"); //should return “Here Is My Handle Here Is My Spout”.
+
+//////////////////////////////////////////////////////////////
+//
+//2. Convert the Time Input Given in 12 Hours Format to 24
+//
+//////////////////////////////////////////////////////////////
+
+// Write a function which can convert the time input given in 12 hours format to 24 hours format
+
+// const convertTo24HrsFormat = (timeText) => {
+//     const
+// }
+
+// convertTo24HrsFormat("12:10AM"); // 00:10
+// convertTo24HrsFormat("5:00AM"); // 05:00
+// convertTo24HrsFormat("12:33PM"); // 12:33
+// convertTo24HrsFormat("01:59PM"); // 13:59
+// convertTo24HrsFormat("11:8PM"); // 23:08
+// convertTo24HrsFormat("10:02PM"); // 22:02
+//
+
+//////////////////////////////////////////////////////////////
+//
+//3. Mapping Data
+//
+//////////////////////////////////////////////////////////////
+
+// Map data to frontend format. The main element is location key and we need to map all data to it. We will have 5 objects at the end.
+
+const loc = [
+  {
+    location_key: [32, 22, 11],
+    autoassign: 1,
+  },
+  {
+    location_key: [41, 42],
+    autoassign: 1,
+  },
+];
+
+const bulkConfig = [
+  {
+    dataValues: {
+      config_key: 100,
+    },
+  },
+  {
+    dataValues: {
+      config_key: 200,
+    },
+  },
+];
+
+const mappingData = (loc, bulkConfig) => {
+  const res = [];
+
+  loc.map((item, index) => {
+    const autoassign = item.autoassign;
+    const config_key = bulkConfig[index].dataValues.config_key;
+
+    item.location_key.map((item) => {
+      const location_key = item;
+      const obj = { config_key, location_key, autoassign };
+      res.push(obj);
+    });
+  });
+
+  return res;
+};
+
+// console.log(mappingData(loc, bulkConfig));
+
+// [{config_key: 100, location_key: 32, autoassign: 1}, {config_key: 100, location_key: 22, autoassign: 1}]
+
+//////////////////////////////////////////////////////////////
+//
+//5. Validation Messages
+//
+//////////////////////////////////////////////////////////////
+
+// Format backend validation message to frontend format
+
+const convertReadableFormat = (errObj) => {
+  const res = [];
+
+  Object.entries(errObj).map((item) => {
+    // console.log(item);
+    const key = item[0];
+    const value = item[1].errors.map((item) => item.message).join(", ");
+
+    res.push(`${key}: ${value}`);
+  });
+
+  return res;
+};
+
+const backendErrors = {
+  email: {
+    errors: [
+      {
+        message: "Can't be blank",
+      },
+    ],
+  },
+  password: {
+    errors: [
+      {
+        message: "Must contain symbols in different case",
+      },
+      {
+        message: "Must be at least 8 symbols length",
+      },
+    ],
+  },
+  passwordConfirmation: {
+    errors: [
+      {
+        message: "Must match with password",
+      },
+    ],
+  },
+};
+
+// console.log(convertReadableFormat(backendErrors));
+
+// ["Email: Can't be blank", "Password: Must contain symbols, Must be at least 8 symbols", "passwordConfirmation: Must match with password"]
+
+//////////////////////////////////////////////////////////////
+//
+//
+//
+//////////////////////////////////////////////////////////////
